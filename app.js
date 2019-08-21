@@ -1,14 +1,16 @@
-const http = require("http");
-const fs = require("fs");
+const http = require("http")
+const fs = require("fs")
+
+const port = 4000
 
 http.createServer((request, response) => {
 		
-		let dir = "public/";
+		let dir = "public/"
 
-		let file = (request.url == "/") ? "index.html" : request.url;
-			file = (file.match(/[^.]+(\.[^?#]+)?/) || [])[0];
+		let file = (request.url == "/") ? "index.html" : request.url
+			file = (file.match(/[^.]+(\.[^?#]+)?/) || [])[0]
 		
-		let ext = file.substring( file.lastIndexOf(".") ).toLowerCase();
+		let ext = file.substring( file.lastIndexOf(".") ).toLowerCase()
 
 		let types = {
 			".html"	: "text/html",
@@ -27,20 +29,20 @@ http.createServer((request, response) => {
 			".eot"	: "application/vnd.ms-fontobject",
 			".otf"	: "application/font-otf",
 			".svg"	: "application/image/svg+xml"
-		};
+		}
 
-		let contentType = types[ext] || "application/octet-stream";
+		let contentType = types[ext] || "application/octet-stream"
 
 		fs.readFile( dir + file, (error, content) => {
 			
 			if ( error ) {
-				response.writeHead(400, { "Content-Type" : "text/plain" } );
+				response.writeHead(404, { "Content-Type" : "text/plain" } )
 				response.end("ARCHIVO NO ENCONTRADO");
 			} else {
-				response.writeHead(200, { "Content-Type" : contentType } );
-				response.end(content);
+				response.writeHead(200, { "Content-Type" : contentType } )
+				response.end(content)
 			}
 
-		});
+		})
 
-}).listen(4000);
+}).listen(port)
