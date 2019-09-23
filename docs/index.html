@@ -112,7 +112,7 @@
 
 		<main class="container-fluid">
 			<section id="ultimas-noticias" class="row">
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
+				<article class="col-12 col-md-6 col-lg-12 py-3 noticia d-none"> <!-- d-none visibilidad oculta-->
 
 					<!-- Noticia #1 -->
 					<div class="row">
@@ -129,57 +129,7 @@
 					</div>
 
 				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
 
-					<!-- Noticia #2 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/tickets-rusia-mundial.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>Comenzó la venta de entradas para el Mundial de Rusia 2018</h3>
-							<p>por <a href="#">Laura Smasnatta</a></p>
-							<p>Hoy se abrió la venta al público de tickets, a través del sitio oficial de la FIFA. El proceso se dividirá en dos partes y los espectadores deberán solicitar una tarjeta de hincha 'Fan ID'.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
-				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
-
-					<!-- Noticia #3 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/firpo.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>A 94 años del derechazo que convirtió en leyenda a Luis Ángel Firpo</h3>
-							<p>por <a href="#">Diego Di Marco</a></p>
-							<p>El 14/9/1923 el boxeador argentino enfrento en Nueva York a Jack Dempsey, uno de los mejores pesos pesados de la historia.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
-				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
-
-					<!-- Noticia #3 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/buenos-aires.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>Buenos Aires 2018 presentó su innovador proyecto de parques y de ceremonia inaugural ante el COI</h3>
-							<p>por <a href="#">Melina Morales</a></p>
-							<p>El Comité Organizador de los Juegos de la Juventud presentó su concepto de parques ante la 131a sesión del Comité Olímpico Internacional (COI) que se realizó en Lima. La ceremonia inaugural se realizará al aire libre.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
-				</article>
 			</section>
 
 			<hr>
@@ -248,7 +198,7 @@
 			let ajax = new XMLHttpRequest()
 
 			// 1. Obtener los datos
-			ajax.open( "GET" , "https://reqres.in/api/users?page=2")    //Peticiones GET = solicitar y obtener info | POST = envian datos
+			ajax.open( "GET" , "noticias.json")    //Peticiones GET = solicitar y obtener info | POST = envian datos
 			ajax.onload = function(){                                   //<--hacer esto, si se ejecuta: (peticion exitosa)
 				if( ajax.status == 200){  
 
@@ -257,27 +207,32 @@
 				//console.log( ajax.response )                            //<-- JSON plano
 
 				//console.log("Despues del parseo:")
-				let usuarios = JSON.parse(ajax.response)
+				let datos = JSON.parse(ajax.response)
 				//console.log( usuarios )                                 //<-- de JSON a Object
 
 			// 3. Procesar los datos
-				usuarios.data.forEach(function(item){
+				//usuarios.data.forEach(function(usuario){                      //datos.noticias
+				datos.noticias.forEach(function(item){
+
 
 			// 4. Hacer uso de los datos individualizados
 				//console.log( `Hallo! Ich bin ${usuario.first_name} ${usuario.last_name} und mein email ist ${usuario.email}`)
 				//console.log(`Noticia del dia: ${item.titulo} de ${item.autor}`)
-				crearNoticia(item)
+				
+				//crearNoticia(item)
+				clonarNoticia(item)
 
-				})
 
+			})
 
-				} else{
+				} else { 
 					ajax.onerror()
 				}
 			}
 			ajax.onerror = function(){                                  //<-- si no se ejecuta: (peticion fallida)
 				alert("ERROR ERROR ERROR")                 
 			}
+			
 			ajax.send()
 
 
@@ -315,8 +270,33 @@
 
 			}
 
+			function clonarNoticia(noticia){
+				//console.log("Clonar noticia")
+				//console.log(noticia)
+
+				let clon = document.querySelector(".noticia").cloneNode(true)  //<-cloneNode para copiar todo el elemento
+
+				clon.querySelector("h3").innerText = noticia.titulo
+
+				clon.querySelector("a").innerText = noticia.autor
+
+				clon.querySelector("p:last-child").innerText = noticia.detalle //<-ultimo parrafo, por eso last-child
+
+				clon.querySelector("img").src = noticia.img                   //<-porque es una imagen se usa src(source)
+
+				clon.classList.remove("d-none")                               //<-para que las noticias se vean por js
+
+
+				document.querySelector("#ultimas-noticias").appendChild( clon ) 
+				//este comando es para que sean visibles.
+
+
+				console.log(clon)
+			}
+
 
 		</script>
 	</body>
 
 </html>
+
