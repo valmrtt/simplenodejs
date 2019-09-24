@@ -198,7 +198,8 @@
 			let ajax = new XMLHttpRequest()
 
 			// 1. Obtener los datos
-			ajax.open( "GET" , "noticias.json")    //Peticiones GET = solicitar y obtener info | POST = envian datos
+			ajax.open( "GET" , "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.clarin.com%2Frss%2Fdeportes%2F")                    
+			//Peticiones GET = solicitar y obtener info | POST = envian datos
 			ajax.onload = function(){                                   //<--hacer esto, si se ejecuta: (peticion exitosa)
 				if( ajax.status == 200){  
 
@@ -208,11 +209,11 @@
 
 				//console.log("Despues del parseo:")
 				let datos = JSON.parse(ajax.response)
-				//console.log( usuarios )                                 //<-- de JSON a Object
+				console.log( datos )                                 //<-- de JSON a Object
 
 			// 3. Procesar los datos
 				//usuarios.data.forEach(function(usuario){                      //datos.noticias
-				datos.noticias.forEach(function(item){
+				datos.items.forEach(function(item){
 
 
 			// 4. Hacer uso de los datos individualizados
@@ -276,13 +277,13 @@
 
 				let clon = document.querySelector(".noticia").cloneNode(true)  //<-cloneNode para copiar todo el elemento
 
-				clon.querySelector("h3").innerText = noticia.titulo
+				clon.querySelector("h3").innerText = noticia.title
 
-				clon.querySelector("a").innerText = noticia.autor
+				clon.querySelector("a").innerText = noticia.author
 
-				clon.querySelector("p:last-child").innerText = noticia.detalle //<-ultimo parrafo, por eso last-child
+				clon.querySelector("p:last-child").innerText = noticia.descrption //<-ultimo parrafo, por eso last-child
 
-				clon.querySelector("img").src = noticia.img                   //<-porque es una imagen se usa src(source)
+				clon.querySelector("img").src = noticia.enclosure.link                   //<-porque es una imagen se usa src(source)
 
 				clon.classList.remove("d-none")                               //<-para que las noticias se vean por js
 
@@ -293,6 +294,7 @@
 
 				console.log(clon)
 			}
+
 
 
 		</script>
