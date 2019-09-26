@@ -1,7 +1,7 @@
 const http = require("http")
 const fs = require("fs")
 
-const port = 80
+const port = process.env.PORT || 80                         //se usa el 80 para localhost | process.env.PORT es para heroku
 
 http.createServer((request, response) => {
 		
